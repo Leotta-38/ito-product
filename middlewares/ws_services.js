@@ -23,7 +23,9 @@ const msgTypeList = {
   REQ_FINISH_GAME: 16,
   RES_FINISH_GAME: 17,
   REQ_EXIT_ROOM: 18,
-  RES_EXIT_ROOM: 19
+  RES_EXIT_ROOM: 19,
+  REQ_DEMO_MODE: 90,
+  RES_DEMO_MODE: 91
 }
 
 async function joinRoom(clientsList, data, uuid) {
@@ -34,14 +36,10 @@ async function joinRoom(clientsList, data, uuid) {
     for (let clientUuid in clientsList) {
       const resData = {
         type: msgTypeList.RES_JOIN_ROOM,
-        users: users,
-        isGameMaster: false
+        users: users
       }
 
       const ws = clientsList[clientUuid]
-      if (clientUuid === resData.users[0].uuid) {
-        resData.isGameMaster = true
-      }
       ws.send(JSON.stringify(resData))
     }
   } else {
@@ -225,14 +223,10 @@ async function exitRoom(clientsList, data, uuid) {
       for (let clientUuid in clientsList) {
         const resData = {
           type: msgTypeList.RES_EXIT_ROOM,
-          users: users,
-          isGameMaster: false
+          users: users
         }
   
         const ws = clientsList[clientUuid]
-        if (clientUuid === resData.users[0].uuid) {
-          resData.isGameMaster = true
-        }
         ws.send(JSON.stringify(resData))
       }
     }
@@ -253,6 +247,24 @@ function createRandomNumbers(numberOgPlayers) {
   return randomNumbers
 }
 
+async function demoMode(clientsList, data) {
+  if (data.type === 90) {
+    const topic = await Topic.find12()
+
+    for (let clientUuid in clientsList) {
+      const resData = {
+        type: msgTypeList.RES_DEMO_MODE,
+        topic: topic
+      }
+
+      const ws = clientsList[clientUuid]
+      ws.send(JSON.stringify(resData))
+    }
+  } else {
+    return
+  }
+}
+
 module.exports = {
   joinRoom,
   showRandomTopic,
@@ -263,5 +275,6 @@ module.exports = {
   checkOrder,
   continueGame,
   finishGame,
-  exitRoom
+  exitRoom,
+  demoMode
 }

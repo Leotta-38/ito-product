@@ -7,10 +7,13 @@ const expressWs = require('express-ws')(app)
 const port = process.env.PORT
 const roomRouter = require('./routes/room_router')
 const wsServices = require('./middlewares/ws_services')
+const initialiseDb = require('./middlewares/initialise_db')
 
 app.use(express.static('public'))
 
 app.use(roomRouter)
+
+initialiseDb()
 
 const clientsList = {}
 
@@ -35,10 +38,15 @@ app.ws('/', ws => {
     wsServices.continueGame(clientsList, dataInJs)
     wsServices.finishGame(clientsList, dataInJs)
     wsServices.exitRoom(clientsList, dataInJs, uuid)
+    wsServices.demoMode(clientsList, dataInJs)
   })
 
   ws.on('close', () => {
     delete clientsList[uuid]
+    const numberOgPlayers = Object.keys(clientsList).length
+    if (numberOgPlayers === 0) {
+      initialiseDb()
+    }
   })
 })
 

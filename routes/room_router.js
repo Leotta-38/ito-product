@@ -1,23 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const User = require('../models/player')
-const Room = require('../models/room')
+const Checkers = require('../middlewares/checkers')
 
 const endpoint = process.env.ENDPOINT
 
 router.get('/api/room/:username', async (req, res) => {
   const username = req.params.username
 
-  console.log(username);
-
-  const isIfUsernameIsDuplicated = await checkIfUsernameIsDuplicated(username)
-  console.log(isIfUsernameIsDuplicated);
-
-  const isGoing = await checkIfIsGoing()
-  console.log(isGoing);
-
-  const isFull = await checkIfIsFull()
-  console.log(isFull);
+  const isIfUsernameIsDuplicated = await Checkers.checkIfUsernameIsDuplicated(username)
+  const isGoing = await Checkers.checkIfIsGoing()
+  const isFull = await Checkers.checkIfIsFull()
 
   if (isIfUsernameIsDuplicated) {
     res.status(409).json({
@@ -39,20 +31,5 @@ router.get('/api/room/:username', async (req, res) => {
   }
 })
 
-async function checkIfUsernameIsDuplicated(username) {
-  const users = await User.findAllOrderById()
-  const usernameList = users.map(user => user.username)
-  return usernameList.includes(username)
-}
-
-async function checkIfIsGoing() {
-  const isGoing = await Room.findAll()
-  return isGoing.is_going
-}
-
-async function checkIfIsFull() {
-  const users = await User.findAllOrderById()
-  return users.length === 6
-}
 
 module.exports = router

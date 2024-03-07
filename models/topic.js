@@ -10,6 +10,17 @@ async function findRandom() {
   return result.rows[0]
 }
 
+async function find12() {
+  const sql = `
+    SELECT * FROM topics 
+    WHERE id = 12;
+  `
+  const result = await db.query(sql)
+  return result.rows[0]
+}
+
+
 module.exports = {
-  findRandom
+  findRandom,
+  find12
 }
