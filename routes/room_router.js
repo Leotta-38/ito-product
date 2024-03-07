@@ -13,15 +13,15 @@ router.get('/api/room/:username', async (req, res) => {
 
   if (isIfUsernameIsDuplicated) {
     res.status(409).json({
-      message: 'this username is already used.'
+      message: 'This player name is already used.'
     })
   } else if (isGoing) {
     res.status(503).json({
-      message: 'sorry, the game is going. wait a while.'
+      message: 'Sorry, the game has already started. Please wait for the next one.'
     })
   } else if (isFull) {
     res.status(503).json({
-      message: 'sorry, the room is full. wait a while.'
+      message: 'Sorry, the room is full.'
     })
   } else {
     res.status(200).json({

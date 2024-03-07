@@ -7,6 +7,7 @@ const expressWs = require('express-ws')(app)
 const port = process.env.PORT
 const roomRouter = require('./routes/room_router')
 const wsServices = require('./middlewares/ws_services')
+const User = require('./models/player')
 const initialiseDb = require('./middlewares/initialise_db')
 
 app.use(express.static('public'))
@@ -46,6 +47,8 @@ app.ws('/', ws => {
     const numberOgPlayers = Object.keys(clientsList).length
     if (numberOgPlayers === 0) {
       initialiseDb()
+    } else {
+      User.destroyUser(uuid)
     }
   })
 })
