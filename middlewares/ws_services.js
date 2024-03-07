@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const User = require('../models/player')
 const Topic = require('../models/topic')
 const Room = require('../models/room')
 

@@ -1,6 +1,6 @@
 CREATE DATABASE game_ito;
 
-CREATE TABLE users(
+CREATE TABLE players(
   id SERIAL PRIMARY KEY,
   username TEXT UNIQUE NOT NULL,
   uuid TEXT NOT NULL,

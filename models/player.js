@@ -1,14 +1,14 @@
 const db = require('../db')
 
 async function findAllOrderById() {
-  const sql = `SELECT * FROM users ORDER BY id;`
+  const sql = `SELECT * FROM players ORDER BY id;`
   const result = await db.query(sql)
   return result.rows
 }
 
 async function create(username, uuid) {
   const sql = `
-    INSERT INTO users (username, uuid) 
+    INSERT INTO players (username, uuid) 
     VALUES ($1, $2) 
     RETURNING *;
   `
@@ -18,7 +18,7 @@ async function create(username, uuid) {
 
 async function updateResponse(response, uuid) {
   const sql = `
-    UPDATE users
+    UPDATE players
     SET 
       response = $1 
     WHERE uuid = $2 
@@ -31,7 +31,7 @@ async function updateResponse(response, uuid) {
 
 async function updateOrderid(orderid, id) {
   const sql = `
-    UPDATE users
+    UPDATE players
     SET 
       orderid = $1 
     WHERE id = $2 
@@ -44,7 +44,7 @@ async function updateOrderid(orderid, id) {
 
 async function destroyOrderid() {
   const sql = `
-    UPDATE users
+    UPDATE players
     SET 
       orderid = NULL 
     RETURNING *;
@@ -56,7 +56,7 @@ async function destroyOrderid() {
 
 async function changeNumber(number, uuid) {
   const sql = `
-    UPDATE users
+    UPDATE players
     SET 
       number = $1
     WHERE uuid = $2 
@@ -69,7 +69,7 @@ async function changeNumber(number, uuid) {
 
 async function destroyResponse() {
   const sql = `
-    UPDATE users
+    UPDATE players
     SET 
       response = NULL 
     RETURNING *;
@@ -81,7 +81,7 @@ async function destroyResponse() {
 
 async function destroyUser(uuid) {
   const sql = `
-    DELETE FROM users 
+    DELETE FROM players 
     WHERE uuid = $1 
     RETURNING *;
   `
@@ -91,12 +91,12 @@ async function destroyUser(uuid) {
 
 async function recreateRoom() {
   const sql1 = `
-    DROP TABLE users;
+    DROP TABLE players;
   `
   await db.query(sql1)
 
   const sql2 = `
-    CREATE TABLE users(
+    CREATE TABLE players(
       id SERIAL PRIMARY KEY,
       username TEXT UNIQUE NOT NULL,
       uuid TEXT NOT NULL,
