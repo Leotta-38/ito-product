@@ -8,6 +8,8 @@ const endpoint = process.env.ENDPOINT
 router.get('/api/room/:username', async (req, res) => {
   const username = req.params.username
 
+  console.log(username);
+
   const isIfUsernameIsDuplicated = await checkIfUsernameIsDuplicated(username)
   const isGoing = await checkIfIsGoing()
   const isFull = await checkIfIsFull()
