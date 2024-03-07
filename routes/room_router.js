@@ -3,6 +3,8 @@ const router = express.Router()
 const User = require('../models/user')
 const Room = require('../models/room')
 
+const endpoint = process.env.ENDPOINT
+
 router.get('/api/room/:username', async (req, res) => {
   const username = req.params.username
 
@@ -24,7 +26,8 @@ router.get('/api/room/:username', async (req, res) => {
     })
   } else {
     res.status(200).json({
-      message: 'ok'
+      message: 'ok',
+      endpoint: endpoint
     })
   }
 })
